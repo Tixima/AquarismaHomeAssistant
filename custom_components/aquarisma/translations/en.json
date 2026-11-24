@@ -1,0 +1,271 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect Aquarisma",
+        "description": "Aquarisma opens in your browser. The password stays there and is not saved in Home Assistant. Reading is requested by default. Writing is optional and can be left off.",
+        "data": {
+          "base_url": "Aquarisma address",
+          "use_my_home_assistant": "Use My Home Assistant for the return address",
+          "allow_write": "Also request permission to record feeding, care, water changes and readings"
+        },
+        "data_description": {
+          "base_url": "The address of your Aquarisma site. No path, no user name and no password. HTTP is only accepted for localhost and private addresses.",
+          "use_my_home_assistant": "Recommended. Turn this off only when this Home Assistant instance has a public address and you want the browser to return directly to /auth/external/callback.",
+          "allow_write": "Home Assistant can then confirm a single planned feeding, complete one care task, and record a water change or a manual reading. It never doses, feeds hardware, or changes a schedule by itself."
+        }
+      },
+      "reconfigure": {
+        "title": "Update Aquarisma",
+        "description": "Change the address or the write permission. You will sign in again. Devices stay until the next complete snapshot.",
+        "data": {
+          "base_url": "Aquarisma address",
+          "use_my_home_assistant": "Use My Home Assistant for the return address",
+          "allow_write": "Also request permission to record feeding, care, water changes and readings"
+        },
+        "data_description": {
+          "base_url": "The address of your Aquarisma site, without a path or a password.",
+          "use_my_home_assistant": "Recommended unless this Home Assistant instance is reached through its own public address.",
+          "allow_write": "Turn this on to record care from Home Assistant. Existing read access stays available either way."
+        }
+      },
+      "reauth_confirm": {
+        "title": "Reconnect Aquarisma",
+        "description": "The saved sign-in is no longer accepted. Sign in again. Devices and history stay until a new complete snapshot says an aquarium is gone."
+      }
+    },
+    "error": {
+      "cannot_connect": "Aquarisma could not be reached. Check the address and that this Home Assistant instance is allowed to connect.",
+      "invalid_url": "Enter the site address only. A path, a password in the address, or plain HTTP on a public host is not accepted.",
+      "no_external_url": "This Home Assistant instance has no external address. Leave My Home Assistant enabled, or set an external URL in the Home Assistant network settings."
+    },
+    "abort": {
+      "already_configured": "This Aquarisma connection is already set up.",
+      "oauth_rejected": "The sign-in was cancelled.",
+      "oauth_state": "The sign-in could not be matched to this attempt. Start the connection again.",
+      "oauth_token": "Aquarisma did not accept the sign-in.",
+      "wrong_account": "This sign-in belongs to a different Aquarisma connection.",
+      "reauth_successful": "Aquarisma is connected again.",
+      "reconfigure_successful": "The Aquarisma connection was updated."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Aquarisma",
+        "description": "How often Home Assistant asks Aquarisma for a snapshot. The server also enforces its own minimum and maximum.",
+        "data": {
+          "poll_interval": "Update interval"
+        },
+        "data_description": {
+          "poll_interval": "Seconds between snapshots. Allowed values are 30 to 300. A shorter interval does not make a manual test a live sensor."
+        }
+      }
+    }
+  },
+  "issues": {
+    "unsupported_schema": {
+      "title": "Aquarisma sent a snapshot this version cannot read",
+      "description": "The snapshot uses schema {schema}. Existing devices were left unchanged. Update the Aquarisma integration before relying on these entities."
+    },
+    "empty_snapshot": {
+      "title": "Aquarisma returned no aquariums",
+      "description": "The connection is signed in, but no aquarium is shared with it. Check the grants in Aquarisma. An empty list is not a connection error, and previously removed devices stay removed."
+    },
+    "aquarium_overlap": {
+      "title": "{name} is managed by another Aquarisma connection",
+      "description": "More than one connection can see {name}. Home Assistant keeps a single device and leaves it with the connection that was created first. Remove the extra grant, or accept that this connection will not create a second device."
+    }
+  },
+  "exceptions": {
+    "aquarium_not_managed": {
+      "message": "This aquarium is not managed by an Aquarisma connection."
+    },
+    "action_not_allowed": {
+      "message": "Aquarisma refused the action. The connection may be missing the write permission, or the sign-in has expired."
+    },
+    "action_rejected": {
+      "message": "Aquarisma rejected the action. Check the aquarium, the plan and the value."
+    },
+    "idempotency_conflict": {
+      "message": "This idempotency key was already used for a different action. Use a new key for a new action."
+    },
+    "invalid_idempotency_key": {
+      "message": "The idempotency key must be 8 to 80 characters and may contain only letters, numbers, dots, underscores, colons and hyphens."
+    },
+    "api_error": {
+      "message": "Aquarisma could not complete the action: {detail}"
+    }
+  },
+  "services": {
+    "refresh": {
+      "name": "Refresh",
+      "description": "Fetch a new snapshot for every Aquarisma connection."
+    },
+    "confirm_feeding": {
+      "name": "Confirm feeding",
+      "description": "Confirm one planned feeding. The plan, slot and date must identify that single feeding.",
+      "fields": {
+        "aquarium_id": {
+          "name": "Aquarium",
+          "description": "External id of the aquarium. It is the device identifier, not the display name."
+        },
+        "plan_id": {
+          "name": "Plan",
+          "description": "Id of the feeding plan."
+        },
+        "slot_id": {
+          "name": "Slot",
+          "description": "Numeric slot inside the plan."
+        },
+        "date": {
+          "name": "Date",
+          "description": "Aquarium-local date of the feeding, formatted YYYY-MM-DD."
+        },
+        "idempotency_key": {
+          "name": "Idempotency key",
+          "description": "Optional stable key of 8 to 80 characters. Repeat the same key to retry the same action safely."
+        }
+      }
+    },
+    "complete_care": {
+      "name": "Complete care task",
+      "description": "Complete one care task by its occurrence id.",
+      "fields": {
+        "aquarium_id": {
+          "name": "Aquarium",
+          "description": "External id of the aquarium."
+        },
+        "occurrence_id": {
+          "name": "Occurrence",
+          "description": "Id of the single care occurrence to complete."
+        },
+        "idempotency_key": {
+          "name": "Idempotency key",
+          "description": "Optional stable key of 8 to 80 characters."
+        }
+      }
+    },
+    "record_water_change": {
+      "name": "Record water change",
+      "description": "Record a water change with an explicit volume. There is no default amount.",
+      "fields": {
+        "aquarium_id": {
+          "name": "Aquarium",
+          "description": "External id of the aquarium."
+        },
+        "liters": {
+          "name": "Liters",
+          "description": "Volume of water changed, in liters."
+        },
+        "idempotency_key": {
+          "name": "Idempotency key",
+          "description": "Optional stable key of 8 to 80 characters."
+        }
+      }
+    },
+    "record_measurement": {
+      "name": "Record measurement",
+      "description": "Record one manual water reading. A manual reading is never treated as a live sensor.",
+      "fields": {
+        "aquarium_id": {
+          "name": "Aquarium",
+          "description": "External id of the aquarium."
+        },
+        "parameter": {
+          "name": "Parameter",
+          "description": "Parameter key, for example temperature or nitrite."
+        },
+        "value": {
+          "name": "Value",
+          "description": "The reading, in the unit you send or in the aquarium default."
+        },
+        "unit": {
+          "name": "Unit",
+          "description": "Optional unit code, for example celsius or mg_l."
+        },
+        "measured_at": {
+          "name": "Measured at",
+          "description": "Optional time of the reading. Omit it to use the current time."
+        },
+        "confirm_unusual": {
+          "name": "Confirm unusual value",
+          "description": "Set this when Aquarisma asked for confirmation because the value is far from the expected range."
+        },
+        "idempotency_key": {
+          "name": "Idempotency key",
+          "description": "Optional stable key of 8 to 80 characters."
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "temperature": {"name": "Temperature"},
+      "ph": {"name": "pH"},
+      "gh": {"name": "General hardness"},
+      "kh": {"name": "Carbonate hardness"},
+      "ammonia_nh3": {"name": "Ammonia"},
+      "ammonium_nh4": {"name": "Ammonium"},
+      "tan": {"name": "Total ammonia"},
+      "nitrite": {"name": "Nitrite"},
+      "nitrate": {"name": "Nitrate"},
+      "nitrate_n": {"name": "Nitrate nitrogen"},
+      "phosphate": {"name": "Phosphate"},
+      "phosphate_p": {"name": "Phosphorus"},
+      "oxygen": {"name": "Oxygen"},
+      "co2": {"name": "CO₂"},
+      "conductivity": {"name": "Conductivity"},
+      "tds": {"name": "Total dissolved solids"},
+      "chlorine": {"name": "Chlorine"},
+      "silicate": {"name": "Silicate"},
+      "iron": {"name": "Iron"},
+      "potassium": {"name": "Potassium"},
+      "salinity": {"name": "Salinity"},
+      "specific_gravity": {"name": "Specific gravity"},
+      "alkalinity": {"name": "Alkalinity"},
+      "calcium": {"name": "Calcium"},
+      "magnesium": {"name": "Magnesium"},
+      "orp": {"name": "Redox"},
+      "copper": {"name": "Copper"},
+      "water_value": {"name": "{parameter}"},
+      "water_status": {"name": "Water status"},
+      "water_warnings": {"name": "Water warnings"},
+      "water_incidents": {"name": "Open incidents"},
+      "last_measured": {"name": "Last measured"},
+      "volume": {"name": "Volume"},
+      "feeding_planned": {"name": "Feedings planned"},
+      "feeding_completed": {"name": "Feedings completed"},
+      "feeding_open": {"name": "Feedings open"},
+      "feeding_overdue": {"name": "Feedings overdue"},
+      "next_feeding": {"name": "Next feeding"},
+      "care_open": {"name": "Care tasks open"},
+      "care_overdue": {"name": "Care tasks overdue"},
+      "care_due_today": {"name": "Care due today"},
+      "next_care": {"name": "Next care task"},
+      "last_water_change": {"name": "Last water change"},
+      "livestock_fish": {"name": "Fish"},
+      "livestock_invertebrates": {"name": "Invertebrates"},
+      "livestock_plants": {"name": "Plants"},
+      "livestock_animals": {"name": "Animals"},
+      "livestock_species": {"name": "Species"},
+      "inventory_low": {"name": "Food running low"},
+      "inventory_expiring": {"name": "Food expiring"},
+      "inventory_expired": {"name": "Food expired"}
+    },
+    "binary_sensor": {
+      "water_critical": {"name": "Critical water reading"},
+      "feeding_due": {"name": "Feeding due"},
+      "feeding_fast": {"name": "Fasting day"},
+      "care_due": {"name": "Care due"},
+      "water_change_due": {"name": "Water change due"}
+    },
+    "button": {
+      "confirm_feeding": {"name": "Confirm next feeding"},
+      "complete_care": {"name": "Complete next care task"}
+    },
+    "calendar": {
+      "calendar": {"name": "Calendar"}
+    }
+  }
+}

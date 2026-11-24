@@ -1,0 +1,78 @@
+{
+  "entity": {
+    "sensor": {
+      "temperature": {"default": "mdi:thermometer"},
+      "ph": {"default": "mdi:ph"},
+      "gh": {"default": "mdi:water-plus"},
+      "kh": {"default": "mdi:water-plus"},
+      "ammonia_nh3": {"default": "mdi:molecule"},
+      "ammonium_nh4": {"default": "mdi:molecule"},
+      "tan": {"default": "mdi:molecule"},
+      "nitrite": {"default": "mdi:test-tube"},
+      "nitrate": {"default": "mdi:test-tube"},
+      "nitrate_n": {"default": "mdi:test-tube"},
+      "phosphate": {"default": "mdi:test-tube"},
+      "phosphate_p": {"default": "mdi:test-tube"},
+      "oxygen": {"default": "mdi:weather-windy"},
+      "co2": {"default": "mdi:molecule-co2"},
+      "conductivity": {"default": "mdi:flash"},
+      "tds": {"default": "mdi:beaker"},
+      "chlorine": {"default": "mdi:test-tube"},
+      "silicate": {"default": "mdi:test-tube"},
+      "iron": {"default": "mdi:test-tube"},
+      "potassium": {"default": "mdi:test-tube"},
+      "salinity": {"default": "mdi:waves"},
+      "specific_gravity": {"default": "mdi:scale"},
+      "alkalinity": {"default": "mdi:beaker"},
+      "calcium": {"default": "mdi:test-tube"},
+      "magnesium": {"default": "mdi:test-tube"},
+      "orp": {"default": "mdi:flash"},
+      "copper": {"default": "mdi:test-tube"},
+      "water_value": {"default": "mdi:test-tube"},
+      "water_status": {"default": "mdi:water-check"},
+      "water_warnings": {"default": "mdi:alert"},
+      "water_incidents": {"default": "mdi:alert-circle"},
+      "last_measured": {"default": "mdi:clock-outline"},
+      "volume": {"default": "mdi:cup-water"},
+      "feeding_planned": {"default": "mdi:food"},
+      "feeding_completed": {"default": "mdi:food-apple"},
+      "feeding_open": {"default": "mdi:food-variant"},
+      "feeding_overdue": {"default": "mdi:food-off"},
+      "next_feeding": {"default": "mdi:clock-outline"},
+      "care_open": {"default": "mdi:wrench-clock"},
+      "care_overdue": {"default": "mdi:alert"},
+      "care_due_today": {"default": "mdi:calendar-today"},
+      "next_care": {"default": "mdi:calendar-clock"},
+      "last_water_change": {"default": "mdi:water-sync"},
+      "livestock_fish": {"default": "mdi:fish"},
+      "livestock_invertebrates": {"default": "mdi:snail"},
+      "livestock_plants": {"default": "mdi:flower"},
+      "livestock_animals": {"default": "mdi:paw"},
+      "livestock_species": {"default": "mdi:format-list-bulleted"},
+      "inventory_low": {"default": "mdi:package-variant"},
+      "inventory_expiring": {"default": "mdi:package-variant-closed"},
+      "inventory_expired": {"default": "mdi:package-variant-remove"}
+    },
+    "binary_sensor": {
+      "water_critical": {"default": "mdi:alert-circle"},
+      "feeding_due": {"default": "mdi:food"},
+      "feeding_fast": {"default": "mdi:food-off"},
+      "care_due": {"default": "mdi:wrench-clock"},
+      "water_change_due": {"default": "mdi:water-sync"}
+    },
+    "button": {
+      "confirm_feeding": {"default": "mdi:check"},
+      "complete_care": {"default": "mdi:check-all"}
+    },
+    "calendar": {
+      "calendar": {"default": "mdi:calendar"}
+    }
+  },
+  "services": {
+    "refresh": "mdi:refresh",
+    "confirm_feeding": "mdi:fishbowl",
+    "complete_care": "mdi:check",
+    "record_water_change": "mdi:water-sync",
+    "record_measurement": "mdi:test-tube"
+  }
+}

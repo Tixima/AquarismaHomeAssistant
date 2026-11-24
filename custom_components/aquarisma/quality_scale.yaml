@@ -1,0 +1,162 @@
+# Self-assessment against the quality scale rules shipped with Home Assistant
+# core 2025.10. Before a core pull request, diff this file against
+# homeassistant/components/quality_scale.py of the target release and add any
+# rule that file has gained. The manifest does not claim a scale: bronze still
+# needs the brands repository, the home-assistant.io page, and the core tests.
+rules:
+  action-setup:
+    status: done
+    comment: Actions are registered in async_setup, independent of config entries.
+  appropriate-polling:
+    status: done
+    comment: One coordinator per connection. The interval stays inside 30 to 300 seconds, honors the server minimum and Retry-After, and backs off after errors.
+  brands:
+    status: todo
+    comment: The custom integration ships brand/icon.png for the Marketplace. A core listing still needs icon and logo in github.com/home-assistant/brands.
+  common-modules:
+    status: done
+    comment: Uses the coordinator, config flow, entity platforms, device registry, issue registry and diagnostics helpers.
+  config-flow:
+    status: done
+    comment: OAuth with PKCE. The address is validated before a browser opens. Reauth and reconfigure are separate steps.
+  config-flow-test-coverage:
+    status: todo
+    comment: The flow needs the Home Assistant pytest harness. URL, PKCE and token decisions are covered without Home Assistant in tests/test_contract.py.
+  dependency-transparency:
+    status: done
+    comment: No third-party Python requirements. HTTP uses the shared aiohttp session.
+  docs-actions:
+    status: todo
+    comment: Written in integrations/home-assistant/docs/aquarisma.markdown. Still has to be copied into home-assistant.io.
+  docs-high-level-description:
+    status: todo
+    comment: Written in integrations/home-assistant/docs/aquarisma.markdown. Still has to be copied into home-assistant.io.
+  docs-installation-instructions:
+    status: todo
+    comment: Written in integrations/home-assistant/docs/aquarisma.markdown. Still has to be copied into home-assistant.io.
+  docs-removal-instructions:
+    status: todo
+    comment: Written in integrations/home-assistant/docs/aquarisma.markdown. Still has to be copied into home-assistant.io.
+  entity-event-setup:
+    status: done
+    comment: Entities are added from the coordinator update, not from a bus listener. CoordinatorEntity subscribes and unsubscribes with the entity lifecycle.
+  entity-unique-id:
+    status: done
+    comment: Unique ids are the aquarium id plus a stable suffix. Renaming an aquarium does not change them.
+  has-entity-name:
+    status: done
+    comment: Entity names come from translations. The device name is the aquarium name.
+  runtime-data:
+    status: done
+    comment: Coordinator and authorized aquarium ids live on ConfigEntry.runtime_data.
+  test-before-configure:
+    status: done
+    comment: The address is checked and the public client is registered before the config entry is created. A failed sign-in aborts without creating an entry.
+  test-before-setup:
+    status: done
+    comment: The first refresh runs before platforms are forwarded. Authentication failure starts reauth. Other failures raise ConfigEntryNotReady.
+  unique-config-entry:
+    status: done
+    comment: The unique id is the Aquarisma connection id.
+  action-exceptions:
+    status: done
+    comment: Action handlers raise HomeAssistantError with translation keys. Tokens are not included.
+  config-entry-unloading:
+    status: done
+    comment: Platforms are unloaded and the coordinator is shut down.
+  docs-configuration-parameters:
+    status: todo
+    comment: Address, My Home Assistant, write access and poll interval are documented in the prepared home-assistant.io page.
+  docs-installation-parameters:
+    status: exempt
+    comment: There is no YAML setup.
+  entity-unavailable:
+    status: done
+    comment: Failed polls mark entities unavailable and do not delete them. A complete snapshot that drops an aquarium removes it instead.
+  integration-owner:
+    status: done
+    comment: codeowners lists @Tixima, the GitHub account that owns Tixima/AquaVault.
+  log-when-unavailable:
+    status: done
+    comment: A failed poll raises UpdateFailed with the error code. The coordinator logs that message. Tokens, authorization headers and token responses are not logged.
+  parallel-updates:
+    status: done
+    comment: Every platform sets PARALLEL_UPDATES to 0.
+  reauthentication-flow:
+    status: done
+    comment: HTTP 401 and a rejected refresh token raise ConfigEntryAuthFailed. The reauth flow signs in again without removing devices first.
+  test-coverage:
+    status: todo
+    comment: Client, planning, ownership and URL behavior are tested without Home Assistant. A core pytest suite is still required for the flow, coordinator and platforms.
+  devices:
+    status: done
+    comment: One device per aquarium, identified by (aquarisma, aquarium id), with a link back to the aquarium in Aquarisma.
+  diagnostics:
+    status: done
+    comment: Diagnostics redact tokens, expiry and authorization material.
+  discovery:
+    status: exempt
+    comment: The Aquarisma address belongs to the account. There is nothing on the local network to discover.
+  discovery-update-info:
+    status: exempt
+    comment: Discovery is exempt, so there is no discovered device info to update.
+  docs-data-update:
+    status: todo
+    comment: Polling, ETag, HTTP 304 and backoff are described in the prepared page.
+  docs-examples:
+    status: todo
+    comment: Safe notification and control examples are in the prepared page.
+  docs-known-limitations:
+    status: todo
+    comment: Manual readings, overlap, empty grants and history retention are in the prepared page.
+  docs-supported-devices:
+    status: exempt
+    comment: Aquariums are records created in Aquarisma. This is not a catalog of hardware models.
+  docs-supported-functions:
+    status: todo
+    comment: Entities, calendars and actions are listed in the prepared page.
+  docs-troubleshooting:
+    status: todo
+    comment: The prepared page has a troubleshooting section for sign-in, repairs and unavailable entities.
+  docs-use-cases:
+    status: todo
+    comment: The prepared page explains monitoring, reminders and explicit care records.
+  dynamic-devices:
+    status: done
+    comment: Devices and entities are created from the snapshot and removed only after a complete HTTP 200 snapshot.
+  entity-category:
+    status: done
+    comment: Stock counts that are easy to misread, and secondary water counters, are diagnostic and disabled by default.
+  entity-device-class:
+    status: done
+    comment: Temperature, pH, timestamps, volume and problem states use device classes. Other water parameters stay plain sensors because Home Assistant has no class for them.
+  entity-disabled-by-default:
+    status: done
+    comment: Plant and species counts, inventory counts, warning counts and incident counts start disabled.
+  entity-translations:
+    status: done
+    comment: strings.json, translations/en.json and translations/de.json provide the entity names. Unknown parameters use the parameter key as a placeholder.
+  exception-translations:
+    status: done
+    comment: Action failures use translation keys in strings.json.
+  icon-translations:
+    status: done
+    comment: icons.json covers the entities and actions.
+  reconfiguration-flow:
+    status: done
+    comment: The reconfigure step can change the address, the return address and the write permission, then signs in again.
+  repair-issues:
+    status: done
+    comment: Repairs cover an unsupported schema, an empty grant and an aquarium owned by another connection.
+  stale-devices:
+    status: done
+    comment: A device can be removed from the UI when that aquarium is no longer in the last complete snapshot. A live aquarium cannot be removed.
+  async-dependency:
+    status: done
+    comment: Network access is async through aiohttp. The planning and OAuth helpers are pure functions.
+  inject-websession:
+    status: done
+    comment: The coordinator and the config flow use homeassistant.helpers.aiohttp_client.async_get_clientsession.
+  strict-typing:
+    status: todo
+    comment: Public functions are annotated. The tree is not checked with mypy in CI, so this rule is not claimed.

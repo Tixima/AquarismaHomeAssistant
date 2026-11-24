@@ -9,14 +9,14 @@ This application repository is the source. Aquarisma is not in the default catal
 ## Install from the Marketplace
 
 1. Open **Settings → Marketplace**. Connect GitHub when Home Assistant asks for it.
-2. Add `https://github.com/Tixima/AquaVault` as a custom repository. The category is integration.
+2. Add `https://github.com/Tixima/AquarismaHomeAssistant` as a custom repository. The category is integration.
 3. Install Aquarisma and restart Home Assistant. Version 2026.11.0 or newer is required.
 4. Go to **Settings → Devices & services → Add integration** and search for **Aquarisma**.
 5. Enter the site address, for example `https://app.example.com`.
 6. Keep **My Home Assistant** enabled unless this instance has its own public URL.
 7. Sign in, choose the aquariums or teams, and confirm.
 
-The Marketplace installs `custom_components/aquarisma` from this repository. `hacs.json` in the repository root tells it the minimum Home Assistant version.
+The Marketplace installs `custom_components/aquarisma` from that repository. `hacs.json` in its root tells it the minimum Home Assistant version. A repository that only contains this README, `docs`, `scripts`, and `tests` cannot be installed.
 
 Reading is requested by default. Writing is requested only when the switch in the form is on. The password stays in the browser.
 

@@ -1,0 +1,13 @@
+{
+  "domain": "aquarisma",
+  "name": "Aquarisma",
+  "categories": ["pets", "water", "productivity_information.calendars_todos"],
+  "codeowners": ["@Tixima"],
+  "config_flow": true,
+  "documentation": "https://github.com/Tixima/AquaVault/blob/main/integrations/home-assistant/docs/aquarisma.markdown",
+  "integration_type": "hub",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/Tixima/AquaVault/issues",
+  "requirements": [],
+  "version": "1.2.0"
+}

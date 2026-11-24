@@ -1,0 +1,99 @@
+refresh: {}
+
+confirm_feeding:
+  fields:
+    aquarium_id:
+      required: true
+      example: "BDEMO450"
+      selector:
+        text:
+    plan_id:
+      required: true
+      example: "PDEMO"
+      selector:
+        text:
+    slot_id:
+      required: true
+      example: 2
+      selector:
+        number:
+          min: 1
+          mode: box
+    date:
+      required: true
+      example: "2026-11-24"
+      selector:
+        text:
+    idempotency_key:
+      example: "feed-rio-2026-11-24-slot-2"
+      selector:
+        text:
+
+complete_care:
+  fields:
+    aquarium_id:
+      required: true
+      example: "BDEMO450"
+      selector:
+        text:
+    occurrence_id:
+      required: true
+      example: "ODEMO"
+      selector:
+        text:
+    idempotency_key:
+      example: "care-rio-ODEMO"
+      selector:
+        text:
+
+record_water_change:
+  fields:
+    aquarium_id:
+      required: true
+      example: "BDEMO450"
+      selector:
+        text:
+    liters:
+      required: true
+      example: 40
+      selector:
+        number:
+          min: 0.1
+          step: 0.1
+          mode: box
+    idempotency_key:
+      example: "water-rio-2026-11-24"
+      selector:
+        text:
+
+record_measurement:
+  fields:
+    aquarium_id:
+      required: true
+      example: "BDEMO450"
+      selector:
+        text:
+    parameter:
+      required: true
+      example: "temperature"
+      selector:
+        text:
+    value:
+      required: true
+      example: "25.4"
+      selector:
+        text:
+    unit:
+      example: "celsius"
+      selector:
+        text:
+    measured_at:
+      selector:
+        datetime:
+    confirm_unusual:
+      selector:
+        boolean:
+    idempotency_key:
+      example: "temp-rio-2026-11-24"
+      selector:
+        text:
