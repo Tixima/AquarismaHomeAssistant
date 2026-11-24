@@ -3,28 +3,24 @@
     "step": {
       "user": {
         "title": "Aquarisma verbinden",
-        "description": "Aquarisma öffnet sich im Browser. Das Passwort bleibt dort und wird nicht in Home Assistant gespeichert. Lesen wird immer angefragt. Schreiben ist freiwillig und kann aus bleiben.",
+        "description": "Die Verbindung geht an aquarisma.com. Aquarisma öffnet sich im Browser. Das Passwort bleibt dort und wird nicht in Home Assistant gespeichert. Lesen wird immer angefragt. Schreiben ist freiwillig und kann aus bleiben.",
         "data": {
-          "base_url": "Adresse von Aquarisma",
           "use_my_home_assistant": "My Home Assistant für die Rückleitung verwenden",
           "allow_write": "Zusätzlich das Dokumentieren von Fütterung, Pflege, Wasserwechsel und Messwerten anfragen"
         },
         "data_description": {
-          "base_url": "Die Adresse der Aquarisma-Instanz. Kein Pfad, kein Benutzername und kein Passwort. HTTP gilt nur für localhost und private Adressen.",
           "use_my_home_assistant": "Empfohlen. Nur abschalten, wenn diese Home-Assistant-Instanz eine öffentliche Adresse hat und der Browser direkt nach /auth/external/callback zurückkehren soll.",
           "allow_write": "Home Assistant kann dann eine einzelne geplante Fütterung bestätigen, eine Pflegeaufgabe abschließen und einen Wasserwechsel oder einen manuellen Messwert speichern. Es dosiert nicht, steuert kein Futtergerät und ändert keinen Plan."
         }
       },
       "reconfigure": {
         "title": "Aquarisma aktualisieren",
-        "description": "Adresse oder Schreibrecht ändern. Die Anmeldung beginnt danach erneut. Geräte bleiben, bis der nächste vollständige Snapshot etwas anderes sagt.",
+        "description": "Schreibrecht ändern. Die Anmeldung beginnt danach erneut. Die Verbindung bleibt auf aquarisma.com. Geräte bleiben, bis der nächste vollständige Snapshot etwas anderes sagt.",
         "data": {
-          "base_url": "Adresse von Aquarisma",
           "use_my_home_assistant": "My Home Assistant für die Rückleitung verwenden",
           "allow_write": "Zusätzlich das Dokumentieren von Fütterung, Pflege, Wasserwechsel und Messwerten anfragen"
         },
         "data_description": {
-          "base_url": "Die Adresse der Aquarisma-Instanz, ohne Pfad und ohne Passwort.",
           "use_my_home_assistant": "Empfohlen, außer diese Home-Assistant-Instanz ist über ihre eigene öffentliche Adresse erreichbar.",
           "allow_write": "Einschalten, um Pflege aus Home Assistant zu dokumentieren. Der Lesezugriff bleibt in beiden Fällen erhalten."
         }
@@ -35,7 +31,7 @@
       }
     },
     "error": {
-      "cannot_connect": "Aquarisma ist nicht erreichbar. Adresse prüfen und sicherstellen, dass diese Home-Assistant-Instanz verbinden darf.",
+      "cannot_connect": "aquarisma.com ist nicht erreichbar. Prüfe, ob diese Home-Assistant-Instanz verbinden darf.",
       "invalid_url": "Nur die Adresse der Instanz eintragen. Ein Pfad, ein Passwort in der Adresse oder HTTP auf einem öffentlichen Host wird nicht angenommen.",
       "no_external_url": "Diese Home-Assistant-Instanz hat keine externe Adresse. My Home Assistant eingeschaltet lassen oder in den Netzwerkeinstellungen eine externe URL setzen."
     },

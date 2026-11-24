@@ -3,28 +3,24 @@
     "step": {
       "user": {
         "title": "Connect Aquarisma",
-        "description": "Aquarisma opens in your browser. The password stays there and is not saved in Home Assistant. Reading is requested by default. Writing is optional and can be left off.",
+        "description": "The connection uses aquarisma.com. Aquarisma opens in your browser. The password stays there and is not saved in Home Assistant. Reading is requested by default. Writing is optional and can be left off.",
         "data": {
-          "base_url": "Aquarisma address",
           "use_my_home_assistant": "Use My Home Assistant for the return address",
           "allow_write": "Also request permission to record feeding, care, water changes and readings"
         },
         "data_description": {
-          "base_url": "The address of your Aquarisma site. No path, no user name and no password. HTTP is only accepted for localhost and private addresses.",
           "use_my_home_assistant": "Recommended. Turn this off only when this Home Assistant instance has a public address and you want the browser to return directly to /auth/external/callback.",
           "allow_write": "Home Assistant can then confirm a single planned feeding, complete one care task, and record a water change or a manual reading. It never doses, feeds hardware, or changes a schedule by itself."
         }
       },
       "reconfigure": {
         "title": "Update Aquarisma",
-        "description": "Change the address or the write permission. You will sign in again. Devices stay until the next complete snapshot.",
+        "description": "Change the write permission. You will sign in again. The connection stays on aquarisma.com. Devices stay until the next complete snapshot.",
         "data": {
-          "base_url": "Aquarisma address",
           "use_my_home_assistant": "Use My Home Assistant for the return address",
           "allow_write": "Also request permission to record feeding, care, water changes and readings"
         },
         "data_description": {
-          "base_url": "The address of your Aquarisma site, without a path or a password.",
           "use_my_home_assistant": "Recommended unless this Home Assistant instance is reached through its own public address.",
           "allow_write": "Turn this on to record care from Home Assistant. Existing read access stays available either way."
         }
@@ -35,7 +31,7 @@
       }
     },
     "error": {
-      "cannot_connect": "Aquarisma could not be reached. Check the address and that this Home Assistant instance is allowed to connect.",
+      "cannot_connect": "aquarisma.com could not be reached. Check that this Home Assistant instance is allowed to connect.",
       "invalid_url": "Enter the site address only. A path, a password in the address, or plain HTTP on a public host is not accepted.",
       "no_external_url": "This Home Assistant instance has no external address. Leave My Home Assistant enabled, or set an external URL in the Home Assistant network settings."
     },

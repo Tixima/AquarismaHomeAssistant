@@ -25,6 +25,7 @@ from .const import (
     CONF_REDIRECT_URI,
     CONF_TOKEN,
     CONF_USE_MY,
+    DEFAULT_BASE_URL,
     DEFAULT_POLL,
     DOMAIN,
     MAX_POLL,
@@ -81,6 +82,7 @@ class AquarismaConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     async def async_step_reconfigure(self, user_input: dict[str, Any] | None = None):
         entry = self._get_reconfigure_entry()
         self._reconfigure = True
+        self._base = str(entry.data.get(CONF_BASE_URL) or DEFAULT_BASE_URL)
         errors: dict[str, str] = {}
         if user_input is not None:
             errors = await self._prepare(user_input)
@@ -90,7 +92,6 @@ class AquarismaConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         return self.async_show_form(
             step_id="reconfigure",
             data_schema=self._schema(
-                base_url=entry.data.get(CONF_BASE_URL, ""),
                 use_my=redirect == MY_REDIRECT,
                 allow_write=bool(entry.data.get(CONF_ALLOW_WRITE, False)),
             ),
@@ -98,8 +99,11 @@ class AquarismaConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         )
 
     async def _prepare(self, user_input: dict[str, Any]) -> dict[str, str]:
+        raw = user_input.get(CONF_BASE_URL)
+        if not isinstance(raw, str) or not raw.strip():
+            raw = self._base or DEFAULT_BASE_URL
         try:
-            self._base = normalize_base_url(str(user_input[CONF_BASE_URL]))
+            self._base = normalize_base_url(raw)
         except InvalidAquarismaUrl:
             return {"base": "invalid_url"}
         self._allow_write = bool(user_input.get(CONF_ALLOW_WRITE))
@@ -186,13 +190,10 @@ class AquarismaConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
     @staticmethod
     def _schema(
-        base_url: str | None = None,
         use_my: bool = True,
         allow_write: bool = False,
     ) -> vol.Schema:
-        base = vol.Required(CONF_BASE_URL) if base_url is None else vol.Required(CONF_BASE_URL, default=base_url)
         return vol.Schema({
-            base: str,
             vol.Required(CONF_USE_MY, default=use_my): bool,
             vol.Required(CONF_ALLOW_WRITE, default=allow_write): bool,
         })

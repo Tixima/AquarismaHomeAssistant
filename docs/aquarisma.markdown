@@ -33,16 +33,15 @@ Home Assistant talks to your Aquarisma site over HTTPS. It does not use MQTT, a 
 
 1. Go to {% my integrations title="Settings > Devices & services" %}.
 2. Select **Add integration** and search for **Aquarisma**.
-3. Enter the site address, for example `https://app.example.com`. Do not add a path, a user name, or a password.
-4. Leave **Use My Home Assistant for the return address** on unless this Home Assistant instance has its own public address.
-5. Leave write access off if Home Assistant should only read. Turn it on to record a feeding, a care task, a water change, or a manual test.
-6. Sign in on the Aquarisma page, choose what the connection may see, and confirm.
+3. Leave **Use My Home Assistant for the return address** on unless this Home Assistant instance has its own public address.
+4. Leave write access off if Home Assistant should only read. Turn it on to record a feeding, a care task, a water change, or a manual test.
+5. Sign in on the Aquarisma page, choose what the connection may see, and confirm.
+
+The integration always uses `https://aquarisma.com`. The dialog does not ask for an address and does not offer one in the options.
 
 {% enddetails %}
 
-HTTP is accepted only for `localhost`, loopback, and private addresses, so a lab instance can be linked. A public site must use HTTPS.
-
-The connection is one config entry. Adding the same Aquarisma connection twice is refused. Use **Reconfigure** to change the address or the write permission, and the reauthentication prompt if the sign-in expires.
+The connection is one config entry. Adding the same Aquarisma connection twice is refused. Use **Reconfigure** to change the write permission, and the reauthentication prompt if the sign-in expires.
 
 ### Options
 
@@ -199,14 +198,13 @@ actions:
 - An empty snapshot is a valid grant with no aquariums. It is not a connection failure. Home Assistant removes the devices that this connection used to own.
 - Deleting the config entry does not delete Home Assistant history, statistics, or backups. Revoking the connection in Aquarisma stops new reads. It does not erase values Home Assistant already stored.
 - Anyone who can open this Home Assistant instance can see the imported values. That is separate from the permissions inside Aquarisma.
-- Discovery is not available. The site address is part of your account.
+- Discovery is not available. Every connection uses `https://aquarisma.com`.
 
 ## Troubleshooting
 
 | Symptom | What to do |
 | --- | --- |
-| "Aquarisma could not be reached" | Check the address, DNS, and that this Home Assistant host can open HTTPS to the site. |
-| The address is rejected | Use the origin only, such as `https://app.example.com`. Remove any path. Public HTTP is rejected. |
+| "aquarisma.com could not be reached" | Check DNS and that this Home Assistant host can open HTTPS to aquarisma.com. |
 | Sign-in returns to the wrong place | Keep My Home Assistant enabled, or set the external URL of Home Assistant and allow the exact path `/auth/external/callback`. |
 | A repair says the snapshot schema is unsupported | Update the integration. Devices are left in place until a supported snapshot arrives. |
 | A repair says no aquariums were returned | In Aquarisma, open the connection and share a team or an aquarium. Also confirm the team plan includes external integrations. |

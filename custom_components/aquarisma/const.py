@@ -10,6 +10,7 @@ MIN_POLL = 30
 MAX_POLL = 300
 TOKEN_REFRESH_SKEW = 60
 MY_REDIRECT = "https://my.home-assistant.io/redirect/oauth"
+DEFAULT_BASE_URL = "https://aquarisma.com"
 MANUFACTURER = "Aquarisma"
 ATTRIBUTION = "Data provided by Aquarisma"
 

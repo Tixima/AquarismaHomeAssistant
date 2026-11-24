@@ -12,9 +12,10 @@ This folder is the integration repository. Copy its contents to the root of [Aqu
 2. Add `https://github.com/Tixima/AquarismaHomeAssistant` as a custom repository. The category is integration.
 3. Install Aquarisma and restart Home Assistant. Version 2026.11.0 or newer is required.
 4. Go to **Settings → Devices & services → Add integration** and search for **Aquarisma**.
-5. Enter the site address, for example `https://app.example.com`.
-6. Keep **My Home Assistant** enabled unless this instance has its own public URL.
-7. Sign in, choose the aquariums or teams, and confirm.
+5. Keep **My Home Assistant** enabled unless this instance has its own public URL.
+6. Sign in, choose the aquariums or teams, and confirm.
+
+The dialog does not ask for an address. Every new connection uses `https://aquarisma.com`.
 
 The Marketplace installs `custom_components/aquarisma` from that repository. `hacs.json` in its root tells it the minimum Home Assistant version.
 
