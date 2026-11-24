@@ -11,7 +11,7 @@ The page to copy is [aquarisma.markdown](aquarisma.markdown). The German product
 - Devices, dynamic entities, translations in English and German, icons, repairs, and redacted diagnostics.
 - Entities disappear only after a complete HTTP 200 snapshot.
 - A manual reading does not get `state_class: measurement`.
-- Contract tests in `integrations/home-assistant/tests/test_contract.py` cover the client, the plan, ownership, and the URL rules. They do not boot Home Assistant.
+- Contract tests in `tests/test_contract.py` cover the client, the plan, ownership, and the URL rules. They do not boot Home Assistant. In the Aquarisma application repository that file is `integrations/home-assistant/tests/test_contract.py`.
 
 `quality_scale.yaml` is the honest score. The manifest does not claim bronze, silver, gold, or platinum.
 
@@ -28,7 +28,7 @@ The page to copy is [aquarisma.markdown](aquarisma.markdown). The German product
 ## What this repository must not claim
 
 - A merged core integration.
-- A published home-assistant.io page. The documentation URL in the manifest points at this file on GitHub until that page exists.
+- A published home-assistant.io page. The documentation URL in the manifest points at `docs/aquarisma.markdown` in the integration repository until that page exists.
 - A listing in the Marketplace catalog (`hacs/default`).
 - A brand icon inside Home Assistant.
 - A platinum or gold badge.
@@ -37,8 +37,8 @@ The page to copy is [aquarisma.markdown](aquarisma.markdown). The German product
 
 Home Assistant 2026.11 ships the Marketplace. It is HACS inside Home Assistant. The old HACS custom integration does not install on that version. `hacs.json` is still the repository manifest, and the catalog is still `hacs/default`.
 
-This application repository can be added as a custom integration repository because `hacs.json` is in the root and the component is `custom_components/aquarisma`. The minimum version in `hacs.json` is `2026.11.0`. That check applies once a GitHub release exists. The manifest `version` must match the release tag.
+Copy the contents of this folder to the root of `https://github.com/Tixima/AquarismaHomeAssistant`. The Marketplace reads `hacs.json` and `custom_components/aquarisma` there. The minimum version in `hacs.json` is `2026.11.0`. That check applies once a GitHub release exists. The manifest `version` must match the release tag.
 
-`bash integrations/home-assistant/scripts/package.sh` only copies a tree into `dist/`. It does not publish a release.
+`bash scripts/package.sh` only copies this folder into `dist/`. It does not publish a release. From the application repository the command is `bash integrations/home-assistant/scripts/package.sh`.
 
-`.github/workflows/home-assistant.yml` runs hassfest. `hacs/action` only validates public repositories, and this application repository is private, so that action is not part of the workflow. Run it after the integration has its own public repository.
+The application repository runs hassfest against this folder. `hacs/action` only validates public repositories, so it belongs on AquarismaHomeAssistant, not on the private application repository.

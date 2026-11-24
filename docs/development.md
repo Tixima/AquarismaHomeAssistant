@@ -1,10 +1,12 @@
 # Developing the Home Assistant integration
 
-The component lives in `custom_components/aquarisma` at the repository root, which is where the Marketplace finds it. Home Assistant is not imported by `client.py`, `plan.py`, or `oauth.py`, so those modules can be tested on their own.
+The component lives in `custom_components/aquarisma` next to this file's parent, which is the root the Marketplace reads after this folder is copied into the integration repository. Home Assistant is not imported by `client.py`, `plan.py`, or `oauth.py`, so those modules can be tested on their own.
 
 ```bash
-python3 integrations/home-assistant/tests/test_contract.py
+python3 tests/test_contract.py
 ```
+
+From the Aquarisma application repository that path is `python3 integrations/home-assistant/tests/test_contract.py`.
 
 That suite checks:
 

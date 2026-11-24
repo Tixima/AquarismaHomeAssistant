@@ -8,7 +8,7 @@ import sys
 import unittest
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[3] / "custom_components" / "aquarisma"
+ROOT = Path(__file__).resolve().parents[1] / "custom_components" / "aquarisma"
 
 
 def load(name: str):
@@ -310,7 +310,7 @@ class OauthTests(unittest.TestCase):
 
 class MarketplaceTests(unittest.TestCase):
     def test_repository_layout_matches_the_marketplace(self):
-        repo = Path(__file__).resolve().parents[3]
+        repo = Path(__file__).resolve().parents[1]
         hacs = json.loads((repo / "hacs.json").read_text())
         manifest = json.loads((ROOT / "manifest.json").read_text())
         self.assertEqual(hacs["name"], "Aquarisma")

@@ -4,10 +4,10 @@
   "categories": ["pets", "water", "productivity_information.calendars_todos"],
   "codeowners": ["@Tixima"],
   "config_flow": true,
-  "documentation": "https://github.com/Tixima/AquaVault/blob/main/integrations/home-assistant/docs/aquarisma.markdown",
+  "documentation": "https://github.com/Tixima/AquarismaHomeAssistant/blob/main/docs/aquarisma.markdown",
   "integration_type": "hub",
   "iot_class": "cloud_polling",
-  "issue_tracker": "https://github.com/Tixima/AquaVault/issues",
+  "issue_tracker": "https://github.com/Tixima/AquarismaHomeAssistant/issues",
   "requirements": [],
   "version": "1.2.0"
 }

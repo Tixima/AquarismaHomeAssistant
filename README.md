@@ -4,7 +4,7 @@ Custom integration for [Aquarisma](https://github.com/Tixima/AquaVault). Home As
 
 Home Assistant 2026.11 or newer includes the Marketplace. That is the current Home Assistant Community Store. The separate HACS custom integration is not installed on that version.
 
-This application repository is the source. Aquarisma is not in the default catalog yet, and it is not part of Home Assistant core. The submission steps are in [docs/submission.md](docs/submission.md). The page intended for home-assistant.io is [docs/aquarisma.markdown](docs/aquarisma.markdown).
+This folder is the integration repository. Copy its contents to the root of [AquarismaHomeAssistant](https://github.com/Tixima/AquarismaHomeAssistant), so `hacs.json` and `custom_components/aquarisma` sit at that repository root. A nested `home-assistant/` directory is not installed. Aquarisma is not in the default catalog yet, and it is not part of Home Assistant core. The submission steps are in [docs/submission.md](docs/submission.md). The page intended for home-assistant.io is [docs/aquarisma.markdown](docs/aquarisma.markdown).
 
 ## Install from the Marketplace
 
@@ -16,7 +16,7 @@ This application repository is the source. Aquarisma is not in the default catal
 6. Keep **My Home Assistant** enabled unless this instance has its own public URL.
 7. Sign in, choose the aquariums or teams, and confirm.
 
-The Marketplace installs `custom_components/aquarisma` from that repository. `hacs.json` in its root tells it the minimum Home Assistant version. A repository that only contains this README, `docs`, `scripts`, and `tests` cannot be installed.
+The Marketplace installs `custom_components/aquarisma` from that repository. `hacs.json` in its root tells it the minimum Home Assistant version.
 
 Reading is requested by default. Writing is requested only when the switch in the form is on. The password stays in the browser.
 
@@ -36,9 +36,11 @@ A manual water test is not a live sensor. Automations that switch hardware must 
 
 ## Develop
 
+From this folder, or from the root of the integration repository after the copy:
+
 ```bash
-python3 integrations/home-assistant/tests/test_contract.py
-bash integrations/home-assistant/scripts/package.sh
+python3 tests/test_contract.py
+bash scripts/package.sh
 ```
 
-The package script copies a Marketplace tree into `dist/`. It does not publish a release.
+Inside the Aquarisma application repository the same commands are `python3 integrations/home-assistant/tests/test_contract.py` and `bash integrations/home-assistant/scripts/package.sh`. The package script copies this folder into `dist/`. It does not publish a release.

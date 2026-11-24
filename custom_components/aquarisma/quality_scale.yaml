@@ -27,16 +27,16 @@ rules:
     comment: No third-party Python requirements. HTTP uses the shared aiohttp session.
   docs-actions:
     status: todo
-    comment: Written in integrations/home-assistant/docs/aquarisma.markdown. Still has to be copied into home-assistant.io.
+    comment: Written in docs/aquarisma.markdown. Still has to be copied into home-assistant.io.
   docs-high-level-description:
     status: todo
-    comment: Written in integrations/home-assistant/docs/aquarisma.markdown. Still has to be copied into home-assistant.io.
+    comment: Written in docs/aquarisma.markdown. Still has to be copied into home-assistant.io.
   docs-installation-instructions:
     status: todo
-    comment: Written in integrations/home-assistant/docs/aquarisma.markdown. Still has to be copied into home-assistant.io.
+    comment: Written in docs/aquarisma.markdown. Still has to be copied into home-assistant.io.
   docs-removal-instructions:
     status: todo
-    comment: Written in integrations/home-assistant/docs/aquarisma.markdown. Still has to be copied into home-assistant.io.
+    comment: Written in docs/aquarisma.markdown. Still has to be copied into home-assistant.io.
   entity-event-setup:
     status: done
     comment: Entities are added from the coordinator update, not from a bus listener. CoordinatorEntity subscribes and unsubscribes with the entity lifecycle.
