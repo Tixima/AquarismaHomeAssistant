@@ -13,6 +13,10 @@ from .errors import placeholder
 from .plan import device_ids, device_reconcile, owned_aquarium_ids
 
 
+def _devices_for_entry(registry: dr.DeviceRegistry, entry_id: str) -> list[dr.DeviceEntry]:
+    return [device for device in registry.devices.values() if entry_id in device.config_entries]
+
+
 def other_claims(hass: HomeAssistant, entry_id: str) -> list[tuple[str, str, set[str]]]:
     """Complete aquarium claims held by the other connections."""
 
@@ -61,8 +65,7 @@ def async_sync_devices(hass: HomeAssistant, entry: ConfigEntry) -> None:
         if row is None:
             continue
         team = row.get("team") if isinstance(row.get("team"), dict) else {}
-        dr.async_get_or_create(
-            registry,
+        registry.async_get_or_create(
             config_entry_id=entry.entry_id,
             identifiers={(DOMAIN, aquarium_id)},
             name=str(row.get("name") or aquarium_id),
@@ -76,7 +79,7 @@ def async_sync_devices(hass: HomeAssistant, entry: ConfigEntry) -> None:
         return
     linked = {
         identifier[1]
-        for device in dr.async_entries_for_config_entry(registry, entry.entry_id)
+        for device in _devices_for_entry(registry, entry.entry_id)
         for identifier in device.identifiers
         if identifier[0] == DOMAIN
     }
@@ -91,10 +94,10 @@ def async_sync_devices(hass: HomeAssistant, entry: ConfigEntry) -> None:
             detach.add(aquarium_id)
     if not detach:
         return
-    for device in dr.async_entries_for_config_entry(registry, entry.entry_id):
+    for device in _devices_for_entry(registry, entry.entry_id):
         identifier = next((item[1] for item in device.identifiers if item[0] == DOMAIN), None)
         if identifier in detach:
-            dr.async_update_device(registry, device.id, remove_config_entry_id=entry.entry_id)
+            registry.async_update_device(device.id, remove_config_entry_id=entry.entry_id)
 
 
 @callback
