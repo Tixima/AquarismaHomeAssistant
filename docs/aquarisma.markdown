@@ -205,6 +205,7 @@ actions:
 | Symptom | What to do |
 | --- | --- |
 | "aquarisma.com could not be reached" | Check DNS and that this Home Assistant host can open HTTPS to aquarisma.com. |
+| "Invalid state. Is My Home Assistant configured to go to the right instance?" | The return address must be the same Home Assistant instance that started the sign-in. Open that instance, start the connection again, and leave My Home Assistant pointed at it. |
 | Sign-in returns to the wrong place | Keep My Home Assistant enabled, or set the external URL of Home Assistant and allow the exact path `/auth/external/callback`. |
 | A repair says the snapshot schema is unsupported | Update the integration. Devices are left in place until a supported snapshot arrives. |
 | A repair says no aquariums were returned | In Aquarisma, open the connection and share a team or an aquarium. Also confirm the team plan includes external integrations. |

@@ -12,6 +12,7 @@ import voluptuous as vol
 from homeassistant import config_entries
 from homeassistant.core import callback
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.config_entry_oauth2_flow import _encode_jwt
 from homeassistant.helpers.network import NoURLAvailableError, get_url
 
 from .client import AquarismaClient, AquarismaError
@@ -130,11 +131,18 @@ class AquarismaConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     async def _start_oauth(self):
         self._verifier = code_verifier()
         scopes = READ_SCOPES + (WRITE_SCOPES if self._allow_write else [])
+        # The callback rejects a plain flow id. It only accepts this signed token.
+        encoded = _encode_jwt(
+            self.hass,
+            {"flow_id": self.flow_id, "redirect_uri": self._redirect},
+        )
+        if isinstance(encoded, bytes):
+            encoded = encoded.decode("ascii")
         url = authorize_url(
             self._base,
             client_id=self._client_id,
             redirect_uri=self._redirect,
-            state=self.flow_id,
+            state=encoded,
             verifier=self._verifier,
             scopes=scopes,
         )
@@ -143,7 +151,7 @@ class AquarismaConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     async def async_step_auth(self, user_input: dict[str, Any] | None = None):
         if not user_input or user_input.get("error"):
             return self.async_abort(reason="oauth_rejected")
-        if user_input.get("state") and user_input.get("state") != self.flow_id:
+        if not self._same_flow(user_input.get("state")):
             return self.async_abort(reason="oauth_state")
         code = user_input.get("code")
         if not isinstance(code, str) or not code:
@@ -184,6 +192,12 @@ class AquarismaConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             )
         self._abort_if_unique_id_configured()
         return self.async_create_entry(title=title or "Aquarisma", data=data)
+
+    def _same_flow(self, state: Any) -> bool:
+        """Home Assistant signs the state and returns the decoded payload."""
+
+        flow_id = state.get("flow_id") if isinstance(state, dict) else state
+        return isinstance(flow_id, str) and flow_id == self.flow_id
 
     def _client(self) -> AquarismaClient:
         return AquarismaClient(self._base, AiohttpTransport(async_get_clientsession(self.hass)), "", CLIENT_VERSION)
