@@ -54,6 +54,8 @@ class AquarismaConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         self._allow_write = False
         self._reauth = False
         self._reconfigure = False
+        self._authorize_url = ""
+        self._callback: dict[str, Any] = {}
 
     async def async_step_user(self, user_input: dict[str, Any] | None = None):
         errors: dict[str, str] = {}
@@ -146,14 +148,24 @@ class AquarismaConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             verifier=self._verifier,
             scopes=scopes,
         )
+        self._authorize_url = url
         return self.async_external_step(step_id="auth", url=url)
 
     async def async_step_auth(self, user_input: dict[str, Any] | None = None):
-        if not user_input or user_input.get("error"):
+        if user_input is None:
+            if self._authorize_url:
+                return self.async_external_step(step_id="auth", url=self._authorize_url)
+            return self.async_external_step_done(next_step_id="link")
+        self._callback = user_input
+        return self.async_external_step_done(next_step_id="link")
+
+    async def async_step_link(self, user_input: dict[str, Any] | None = None):
+        callback = self._callback
+        if not callback or callback.get("error"):
             return self.async_abort(reason="oauth_rejected")
-        if not self._same_flow(user_input.get("state")):
+        if not self._same_flow(callback.get("state")):
             return self.async_abort(reason="oauth_state")
-        code = user_input.get("code")
+        code = callback.get("code")
         if not isinstance(code, str) or not code:
             return self.async_abort(reason="oauth_rejected")
         try:
