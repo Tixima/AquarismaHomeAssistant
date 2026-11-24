@@ -197,71 +197,275 @@
   },
   "entity": {
     "sensor": {
-      "temperature": {"name": "Temperature"},
-      "ph": {"name": "pH"},
-      "gh": {"name": "General hardness"},
-      "kh": {"name": "Carbonate hardness"},
-      "ammonia_nh3": {"name": "Ammonia"},
-      "ammonium_nh4": {"name": "Ammonium"},
-      "tan": {"name": "Total ammonia"},
-      "nitrite": {"name": "Nitrite"},
-      "nitrate": {"name": "Nitrate"},
-      "nitrate_n": {"name": "Nitrate nitrogen"},
-      "phosphate": {"name": "Phosphate"},
-      "phosphate_p": {"name": "Phosphorus"},
-      "oxygen": {"name": "Oxygen"},
-      "co2": {"name": "CO₂"},
-      "conductivity": {"name": "Conductivity"},
-      "tds": {"name": "Total dissolved solids"},
-      "chlorine": {"name": "Chlorine"},
-      "silicate": {"name": "Silicate"},
-      "iron": {"name": "Iron"},
-      "potassium": {"name": "Potassium"},
-      "salinity": {"name": "Salinity"},
-      "specific_gravity": {"name": "Specific gravity"},
-      "alkalinity": {"name": "Alkalinity"},
-      "calcium": {"name": "Calcium"},
-      "magnesium": {"name": "Magnesium"},
-      "orp": {"name": "Redox"},
-      "copper": {"name": "Copper"},
-      "water_value": {"name": "{parameter}"},
-      "water_status": {"name": "Water status"},
-      "water_warnings": {"name": "Water warnings"},
-      "water_incidents": {"name": "Open incidents"},
-      "last_measured": {"name": "Last measured"},
-      "volume": {"name": "Volume"},
-      "feeding_planned": {"name": "Feedings planned"},
-      "feeding_completed": {"name": "Feedings completed"},
-      "feeding_open": {"name": "Feedings open"},
-      "feeding_overdue": {"name": "Feedings overdue"},
-      "next_feeding": {"name": "Next feeding"},
-      "care_open": {"name": "Care tasks open"},
-      "care_overdue": {"name": "Care tasks overdue"},
-      "care_due_today": {"name": "Care due today"},
-      "next_care": {"name": "Next care task"},
-      "last_water_change": {"name": "Last water change"},
-      "livestock_fish": {"name": "Fish"},
-      "livestock_invertebrates": {"name": "Invertebrates"},
-      "livestock_plants": {"name": "Plants"},
-      "livestock_animals": {"name": "Animals"},
-      "livestock_species": {"name": "Species"},
-      "inventory_low": {"name": "Food running low"},
-      "inventory_expiring": {"name": "Food expiring"},
-      "inventory_expired": {"name": "Food expired"}
+      "temperature": {
+        "name": "Temperature"
+      },
+      "ph": {
+        "name": "pH"
+      },
+      "gh": {
+        "name": "General hardness"
+      },
+      "kh": {
+        "name": "Carbonate hardness"
+      },
+      "ammonia_nh3": {
+        "name": "Ammonia"
+      },
+      "ammonium_nh4": {
+        "name": "Ammonium"
+      },
+      "tan": {
+        "name": "Total ammonia"
+      },
+      "nitrite": {
+        "name": "Nitrite"
+      },
+      "nitrate": {
+        "name": "Nitrate"
+      },
+      "nitrate_n": {
+        "name": "Nitrate nitrogen"
+      },
+      "phosphate": {
+        "name": "Phosphate"
+      },
+      "phosphate_p": {
+        "name": "Phosphorus"
+      },
+      "oxygen": {
+        "name": "Oxygen"
+      },
+      "co2": {
+        "name": "CO₂"
+      },
+      "conductivity": {
+        "name": "Conductivity"
+      },
+      "tds": {
+        "name": "Total dissolved solids"
+      },
+      "chlorine": {
+        "name": "Chlorine"
+      },
+      "silicate": {
+        "name": "Silicate"
+      },
+      "iron": {
+        "name": "Iron"
+      },
+      "potassium": {
+        "name": "Potassium"
+      },
+      "salinity": {
+        "name": "Salinity"
+      },
+      "specific_gravity": {
+        "name": "Specific gravity"
+      },
+      "alkalinity": {
+        "name": "Alkalinity"
+      },
+      "calcium": {
+        "name": "Calcium"
+      },
+      "magnesium": {
+        "name": "Magnesium"
+      },
+      "orp": {
+        "name": "Redox"
+      },
+      "copper": {
+        "name": "Copper"
+      },
+      "water_value": {
+        "name": "{parameter}"
+      },
+      "water_status": {
+        "name": "Water status"
+      },
+      "water_warnings": {
+        "name": "Water warnings"
+      },
+      "water_incidents": {
+        "name": "Open incidents"
+      },
+      "last_measured": {
+        "name": "Last measured"
+      },
+      "volume": {
+        "name": "Volume"
+      },
+      "feeding_planned": {
+        "name": "Feedings planned"
+      },
+      "feeding_completed": {
+        "name": "Feedings completed"
+      },
+      "feeding_open": {
+        "name": "Feedings open"
+      },
+      "feeding_overdue": {
+        "name": "Feedings overdue"
+      },
+      "next_feeding": {
+        "name": "Next feeding"
+      },
+      "care_open": {
+        "name": "Care tasks open"
+      },
+      "care_overdue": {
+        "name": "Care tasks overdue"
+      },
+      "care_due_today": {
+        "name": "Care due today"
+      },
+      "next_care": {
+        "name": "Next care task"
+      },
+      "last_water_change": {
+        "name": "Last water change"
+      },
+      "livestock_fish": {
+        "name": "Fish"
+      },
+      "livestock_invertebrates": {
+        "name": "Invertebrates"
+      },
+      "livestock_plants": {
+        "name": "Plants"
+      },
+      "livestock_animals": {
+        "name": "Animals"
+      },
+      "livestock_species": {
+        "name": "Species"
+      },
+      "inventory_low": {
+        "name": "Food running low"
+      },
+      "inventory_expiring": {
+        "name": "Food expiring"
+      },
+      "inventory_expired": {
+        "name": "Food expired"
+      }
     },
     "binary_sensor": {
-      "water_critical": {"name": "Critical water reading"},
-      "feeding_due": {"name": "Feeding due"},
-      "feeding_fast": {"name": "Fasting day"},
-      "care_due": {"name": "Care due"},
-      "water_change_due": {"name": "Water change due"}
+      "water_critical": {
+        "name": "Critical water reading"
+      },
+      "feeding_due": {
+        "name": "Feeding due"
+      },
+      "feeding_fast": {
+        "name": "Fasting day"
+      },
+      "care_due": {
+        "name": "Care due"
+      },
+      "water_change_due": {
+        "name": "Water change due"
+      }
     },
     "button": {
-      "confirm_feeding": {"name": "Confirm next feeding"},
-      "complete_care": {"name": "Complete next care task"}
+      "confirm_feeding": {
+        "name": "Confirm next feeding"
+      },
+      "complete_care": {
+        "name": "Complete next care task"
+      }
     },
     "calendar": {
-      "calendar": {"name": "Calendar"}
+      "calendar": {
+        "name": "Calendar"
+      }
+    },
+    "number": {
+      "temperature": {
+        "name": "Temperature"
+      },
+      "ph": {
+        "name": "pH"
+      },
+      "gh": {
+        "name": "General hardness"
+      },
+      "kh": {
+        "name": "Carbonate hardness"
+      },
+      "ammonia_nh3": {
+        "name": "Ammonia"
+      },
+      "ammonium_nh4": {
+        "name": "Ammonium"
+      },
+      "tan": {
+        "name": "Total ammonia"
+      },
+      "nitrite": {
+        "name": "Nitrite"
+      },
+      "nitrate": {
+        "name": "Nitrate"
+      },
+      "nitrate_n": {
+        "name": "Nitrate nitrogen"
+      },
+      "phosphate": {
+        "name": "Phosphate"
+      },
+      "phosphate_p": {
+        "name": "Phosphorus"
+      },
+      "oxygen": {
+        "name": "Oxygen"
+      },
+      "co2": {
+        "name": "CO₂"
+      },
+      "conductivity": {
+        "name": "Conductivity"
+      },
+      "tds": {
+        "name": "Total dissolved solids"
+      },
+      "chlorine": {
+        "name": "Chlorine"
+      },
+      "silicate": {
+        "name": "Silicate"
+      },
+      "iron": {
+        "name": "Iron"
+      },
+      "potassium": {
+        "name": "Potassium"
+      },
+      "salinity": {
+        "name": "Salinity"
+      },
+      "specific_gravity": {
+        "name": "Specific gravity"
+      },
+      "alkalinity": {
+        "name": "Alkalinity"
+      },
+      "calcium": {
+        "name": "Calcium"
+      },
+      "magnesium": {
+        "name": "Magnesium"
+      },
+      "orp": {
+        "name": "Redox"
+      },
+      "copper": {
+        "name": "Copper"
+      },
+      "water_value": {
+        "name": "{parameter}"
+      }
     }
   }
 }

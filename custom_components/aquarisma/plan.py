@@ -239,6 +239,9 @@ def _water(aquarium_id: str, aquarium: dict[str, Any], capabilities: set[str]) -
         if "value" not in row:
             continue
         specs.append(_parameter(aquarium_id, key, row))
+        recorded = _record_parameter(aquarium_id, key, row, capabilities)
+        if recorded is not None:
+            specs.append(recorded)
     specs.append(_binary(
         aquarium_id,
         "water:critical",
@@ -259,9 +262,9 @@ def _water(aquarium_id: str, aquarium: dict[str, Any], capabilities: set[str]) -
         "options": list(WATER_STATUS),
     })
     if "warning_count" in water:
-        specs.append(_count(aquarium_id, "water:warnings", "water_warnings", water.get("warning_count"), enabled=False))
+        specs.append(_count(aquarium_id, "water:warnings", "water_warnings", water.get("warning_count"), diagnostic=True))
     if "open_incidents" in water:
-        specs.append(_count(aquarium_id, "water:incidents", "water_incidents", water.get("open_incidents"), enabled=False))
+        specs.append(_count(aquarium_id, "water:incidents", "water_incidents", water.get("open_incidents"), diagnostic=True))
     if "last_measured_at" in water:
         specs.append({
             "unique_id": f"{aquarium_id}:water:last_measured",
@@ -339,7 +342,7 @@ def _feeding(aquarium_id: str, aquarium: dict[str, Any], capabilities: set[str])
             _count(aquarium_id, "feeding:open", "feeding_open", feeding.get("open_today")),
             _count(aquarium_id, "feeding:overdue", "feeding_overdue", feeding.get("overdue")),
             _binary(aquarium_id, "feeding:due", "feeding_due", bool(feeding.get("due_now")), True, "problem"),
-            _binary(aquarium_id, "feeding:fast", "feeding_fast", bool(feeding.get("fasting_today")), False, None),
+            _binary(aquarium_id, "feeding:fast", "feeding_fast", bool(feeding.get("fasting_today")), True, None),
         ])
         nxt = feeding.get("next") if isinstance(feeding.get("next"), dict) else None
         specs.append({
@@ -410,7 +413,7 @@ def _care(aquarium_id: str, aquarium: dict[str, Any], capabilities: set[str]) ->
                 "translation_key": "complete_care",
                 "action": "care.complete",
                 "parameters": {"occurrence_id": nxt.get("id")},
-                "enabled_default": False,
+                "enabled_default": True,
             })
     if "care.water_changes" in capabilities:
         change: dict[str, Any] = {}
@@ -447,9 +450,9 @@ def _livestock(aquarium_id: str, aquarium: dict[str, Any], capabilities: set[str
     return [
         _count(aquarium_id, "livestock:fish", "livestock_fish", stock.get("fish")),
         _count(aquarium_id, "livestock:invertebrates", "livestock_invertebrates", stock.get("invertebrates")),
-        _count(aquarium_id, "livestock:plants", "livestock_plants", stock.get("plants"), enabled=False),
+        _count(aquarium_id, "livestock:plants", "livestock_plants", stock.get("plants"), diagnostic=True),
         _count(aquarium_id, "livestock:animals", "livestock_animals", stock.get("animals")),
-        _count(aquarium_id, "livestock:species", "livestock_species", stock.get("species"), enabled=False),
+        _count(aquarium_id, "livestock:species", "livestock_species", stock.get("species"), diagnostic=True),
     ]
 
 
@@ -460,10 +463,43 @@ def _inventory(aquarium_id: str, aquarium: dict[str, Any], capabilities: set[str
         return []
     stock = aquarium["inventory"]
     return [
-        _count(aquarium_id, "inventory:low", "inventory_low", stock.get("low"), enabled=False),
-        _count(aquarium_id, "inventory:expiring", "inventory_expiring", stock.get("expiring"), enabled=False),
-        _count(aquarium_id, "inventory:expired", "inventory_expired", stock.get("expired"), enabled=False),
+        _count(aquarium_id, "inventory:low", "inventory_low", stock.get("low"), diagnostic=True),
+        _count(aquarium_id, "inventory:expiring", "inventory_expiring", stock.get("expiring"), diagnostic=True),
+        _count(aquarium_id, "inventory:expired", "inventory_expired", stock.get("expired"), diagnostic=True),
     ]
+
+
+def _record_parameter(
+    aquarium_id: str,
+    key: str,
+    row: dict[str, Any],
+    capabilities: set[str],
+) -> dict[str, Any] | None:
+    if "water.write" not in capabilities:
+        return None
+    value = row.get("value")
+    if isinstance(value, bool) or not isinstance(value, (int, float)):
+        return None
+    known = key in KNOWN_PARAMETERS
+    spec: dict[str, Any] = {
+        "unique_id": f"{aquarium_id}:water:{key}:record",
+        "aquarium_id": aquarium_id,
+        "domain": "number",
+        "key": key,
+        "translation_key": key if known else "water_value",
+        "value": float(value),
+        "unit": _unit(row),
+        "unit_code": row.get("unit_code") if isinstance(row.get("unit_code"), str) else None,
+        "parameter": key,
+        "min": 0,
+        "max": 14 if key == "ph" else 10000,
+        "step": 0.01 if key == "ph" else 0.1,
+        "enabled_default": True,
+        "category": None,
+    }
+    if not known:
+        spec["translation_placeholders"] = {"parameter": key}
+    return spec
 
 
 def _count(
@@ -472,6 +508,7 @@ def _count(
     translation_key: str,
     value: Any,
     enabled: bool = True,
+    diagnostic: bool = False,
 ) -> dict[str, Any]:
     return {
         "unique_id": f"{aquarium_id}:{suffix}",
@@ -481,7 +518,7 @@ def _count(
         "translation_key": translation_key,
         "value": value,
         "enabled_default": enabled,
-        "category": None if enabled else "diagnostic",
+        "category": "diagnostic" if diagnostic else None,
     }
 
 

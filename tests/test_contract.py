@@ -213,7 +213,17 @@ class PlanTests(unittest.TestCase):
         body["aquariums"][0]["inventory"] = {"scope": "assigned", "low": 4}
         specs = {row["unique_id"]: row for row in plan.entity_specs(body)}
         self.assertEqual(specs["B1:inventory:low"]["category"], "diagnostic")
-        self.assertFalse(specs["B1:inventory:low"]["enabled_default"])
+        self.assertTrue(specs["B1:inventory:low"]["enabled_default"])
+
+    def test_write_permission_adds_a_number_for_each_measured_value(self):
+        body = snapshot()
+        body["aquariums"][0]["capabilities"].append("water.write")
+        specs = {row["unique_id"]: row for row in plan.entity_specs(body)}
+        recorded = specs["B1:water:temperature:record"]
+        self.assertEqual(recorded["domain"], "number")
+        self.assertEqual(recorded["value"], 25.4)
+        self.assertTrue(recorded["enabled_default"])
+        self.assertNotIn("B1:water:future_parameter:record", specs)
 
     def test_device_removal_follows_the_snapshot_rule(self):
         existing = {"B1", "B2"}

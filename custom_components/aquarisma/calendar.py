@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from homeassistant.components.calendar import CalendarEntity, CalendarEvent
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.util import dt as dt_util
 
@@ -28,6 +29,36 @@ async def async_setup_entry(
 
 
 class AquarismaCalendar(AquarismaEntity, CalendarEntity):
+    @property
+    def event(self) -> CalendarEvent | None:
+        """Next feeding or care item already present on the snapshot.
+
+        Home Assistant reads this property for the entity state. Without it the
+        base class raises and the calendar stays unavailable.
+        """
+        aquarium = self._aquarium() or {}
+        candidates: list[CalendarEvent] = []
+        feeding = aquarium.get("feeding") if isinstance(aquarium.get("feeding"), dict) else {}
+        care = aquarium.get("care") if isinstance(aquarium.get("care"), dict) else {}
+        nxt = feeding.get("next") if isinstance(feeding.get("next"), dict) else None
+        if nxt:
+            item = _upcoming(nxt.get("at"), str(nxt.get("label") or "Feeding"), minutes=20)
+            if item is not None:
+                candidates.append(item)
+        care_next = care.get("next") if isinstance(care.get("next"), dict) else None
+        if care_next:
+            item = _upcoming(care_next.get("due_at"), str(care_next.get("title") or "Care"), minutes=60)
+            if item is not None:
+                candidates.append(item)
+        if not candidates:
+            return None
+        now = dt_util.now()
+        candidates.sort(key=lambda item: item.start_datetime_local)
+        for item in candidates:
+            if item.end_datetime_local > now:
+                return item
+        return candidates[-1]
+
     async def async_get_events(
         self,
         hass: HomeAssistant,
@@ -48,11 +79,27 @@ class AquarismaCalendar(AquarismaEntity, CalendarEntity):
             end = dt_util.parse_datetime(str(row.get("end") or ""))
             if start is None or end is None or end < start:
                 continue
-            events.append(CalendarEvent(
-                start=start,
-                end=end,
-                summary=str(row.get("summary") or ""),
-                description=row.get("description") if isinstance(row.get("description"), str) else None,
-                uid=row.get("uid") if isinstance(row.get("uid"), str) else None,
-            ))
+            try:
+                events.append(CalendarEvent(
+                    start=dt_util.as_local(start),
+                    end=dt_util.as_local(end),
+                    summary=str(row.get("summary") or ""),
+                    description=row.get("description") if isinstance(row.get("description"), str) else None,
+                    uid=row.get("uid") if isinstance(row.get("uid"), str) else None,
+                ))
+            except HomeAssistantError:
+                continue
         return events
+
+
+def _upcoming(raw: object, summary: str, minutes: int) -> CalendarEvent | None:
+    if not isinstance(raw, str) or raw == "":
+        return None
+    start = dt_util.parse_datetime(raw)
+    if start is None:
+        return None
+    start = dt_util.as_local(start)
+    try:
+        return CalendarEvent(start=start, end=start + timedelta(minutes=minutes), summary=summary)
+    except HomeAssistantError:
+        return None
